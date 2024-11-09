@@ -23,4 +23,6 @@ class AppColors {
   static const Color accentYellowLight = Color(0xff756E1B);
   static const Color accentOrange = Color(0xffF09102);
   static const Color accentOrangeLight = Color(0xff75501B);
+
+  static const Color error = Color(0xffef4444);
 }
