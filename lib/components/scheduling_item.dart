@@ -1,21 +1,17 @@
 import 'dart:math';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+
 import 'package:pet_world_mobile/theme/colors/app_colors.dart';
+import 'package:pet_world_mobile/models/value-objects/scheduling_details.dart';
 
 class SchedulingItem extends StatelessWidget {
-  final String time;
-  final String tutor;
-  final String pet;
-  final String service;
+  final SchedulingDetails scheduling;
   final bool showDivider;
 
   const SchedulingItem({
     super.key,
-    required this.time,
-    required this.tutor,
-    required this.pet,
-    required this.service,
+    required this.scheduling,
     required this.showDivider,
   });
 
@@ -62,7 +58,7 @@ class SchedulingItem extends StatelessWidget {
         children: [
           ListTile(
             leading: Text(
-              time,
+              DateFormat('Hm', 'pt_BR').format(scheduling.date),
               style: const TextStyle(
                 color: AppColors.contentPrimary,
                 fontWeight: FontWeight.bold,
@@ -72,7 +68,7 @@ class SchedulingItem extends StatelessWidget {
             title: Row(
               children: [
                 Text(
-                  pet,
+                  scheduling.petName,
                   style: const TextStyle(
                       color: AppColors.contentPrimary,
                       fontWeight: FontWeight.bold),
@@ -84,7 +80,7 @@ class SchedulingItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  tutor,
+                  scheduling.tutor,
                   style: const TextStyle(
                     color: AppColors.contentSecondary,
                   ),
@@ -92,7 +88,7 @@ class SchedulingItem extends StatelessWidget {
               ],
             ),
             subtitle: Text(
-              service,
+              scheduling.service.name,
               style: const TextStyle(
                 color: AppColors.contentSecondary,
               ),

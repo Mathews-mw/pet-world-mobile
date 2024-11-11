@@ -5,7 +5,7 @@ class Scheduling {
   final String animalType;
   final String petOwner;
   final String ownerContact;
-  final String service;
+  final String serviceCod;
   final String? description;
   final DateTime date;
 
@@ -15,7 +15,7 @@ class Scheduling {
     required this.animalType,
     required this.petOwner,
     required this.ownerContact,
-    required this.service,
+    required this.serviceCod,
     required this.date,
     this.description,
   });
@@ -40,8 +40,8 @@ class Scheduling {
     this.ownerContact = ownerContact;
   }
 
-  set service(String service) {
-    this.service = service;
+  set serviceCod(String serviceCod) {
+    this.serviceCod = serviceCod;
   }
 
   set description(String? description) {

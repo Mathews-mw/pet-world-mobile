@@ -1,5 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_world_mobile/models/value-objects/scheduling_details.dart';
+import 'package:provider/provider.dart';
+import 'package:pet_world_mobile/data/dummy_data.dart';
+import 'package:pet_world_mobile/models/scheduling_list.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:pet_world_mobile/models/service.dart';
@@ -23,36 +27,9 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
     AnimalType.CAT,
   ];
 
-  final List<String> _tutorsList = [
-    'Floyd Beck',
-    'Jordan Evans',
-    'Ian McDonald',
-    'Lulu Reed',
-    'Owen Hardy',
-    'Jeffery Kelly',
-    'Georgia Fernandez',
-    'Alejandro Hale',
-    'Edgar Turner',
-    'Luke Maxwell',
-    'Charlotte James',
-    'Glenn Logan',
-    'Jesse Owens',
-  ];
+  final List<String> _tutorsList = dummyTutorsList;
 
-  final List<Service> _servicesList = [
-    Service(cod: '4780e245-a91c-57ac-966c-76080ac94426', name: 'Banho e Tosa'),
-    Service(
-        cod: 'cbb8183d-8030-56ab-8897-d8fc89b9a8d6',
-        name: 'Serviços Veterinários'),
-    Service(
-        cod: '36575386-5fcf-5ce4-af11-6ccd88d5a35e',
-        name: 'Exames de Laboratório'),
-    Service(cod: '6feaa0a3-5aaa-5977-a07a-8fc7725478e3', name: 'Hospedagem'),
-    Service(cod: '1b1444ad-7016-5f5b-9299-36e6bc345859', name: 'Taxi Dog'),
-    Service(cod: 'cb849881-b6d5-5723-87c3-968c691d9a92', name: 'Spa'),
-    Service(cod: 'b81ee7b9-549c-5829-b6df-bda96b21d56c', name: 'Vacinação'),
-    Service(cod: 'a6698b02-ab17-59b1-a574-63a26df2d9aa', name: 'Clinica'),
-  ];
+  final List<Service> _servicesList = dummyServicesList;
 
   final TextEditingController _tutorController = TextEditingController();
   final TextEditingController _animalTypeController = TextEditingController();
@@ -111,7 +88,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
     });
   }
 
-  void submitForm() {
+  Future<void> submitForm() async {
     final bool isValidForm = formKey.currentState?.validate() ?? false;
 
     if (!isValidForm) {
@@ -134,7 +111,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
 
       return;
     }
-    if (formData['service'] == null) {
+    if (formData['serviceCod'] == null) {
       setState(() {
         _isServiceFieldEmpty = true;
       });
@@ -142,18 +119,16 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
       return;
     }
 
-    formData.forEach((k, v) => print('key: $k | value: $v'));
-
     final selectedDate = formData['date'] as DateTime;
     final selectedTime = formData['hour'] as TimeOfDay;
 
-    final scheduling = Scheduling(
+    final scheduling = SchedulingDetails(
       tutor: formData['tutor'] as String,
       petName: formData['petName'] as String,
       animalType: formData['animalType'] as String,
       petOwner: formData['petOwner'] as String,
       ownerContact: formData['ownerContact'] as String,
-      service: formData['service'] as String,
+      serviceCod: formData['serviceCod'] as String,
       description: formData['description'] as String,
       date: DateTime(
         selectedDate.year,
@@ -163,6 +138,18 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
         selectedTime.minute,
       ),
     );
+
+    try {
+      await Provider.of<SchedulingList>(context, listen: false)
+          .saveScheduling(scheduling);
+
+      // Verifique se o widget ainda está montado antes de chamar Navigator.of(context)
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      print('Erro ao tentar salvar o agendamento: $e');
+    }
   }
 
   @override
@@ -321,7 +308,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                         controller: _serviceController,
                         onSelected: (value) {
                           if (value!.isNotEmpty) {
-                            formData['service'] = value;
+                            formData['serviceCod'] = value;
                             setState(() => _isServiceFieldEmpty = false);
                           }
                         },
