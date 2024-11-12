@@ -1,6 +1,9 @@
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_world_mobile/utils/app_routes.dart';
+import 'package:provider/provider.dart';
+import 'package:pet_world_mobile/models/scheduling_list.dart';
 
 import 'package:pet_world_mobile/theme/colors/app_colors.dart';
 import 'package:pet_world_mobile/models/value-objects/scheduling_details.dart';
@@ -53,44 +56,58 @@ class SchedulingItem extends StatelessWidget {
           ),
         );
       },
-      onDismissed: (_) {},
+      onDismissed: (_) async {
+        try {
+          await Provider.of<SchedulingList>(context, listen: false)
+              .removeScheduling(scheduling);
+        } catch (e) {
+          print('Erro ao tentar remover agendamento: $e');
+        }
+      },
       child: Column(
         children: [
-          ListTile(
-            leading: Text(
-              DateFormat('Hm', 'pt_BR').format(scheduling.date),
-              style: const TextStyle(
-                color: AppColors.contentPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+          InkWell(
+            onTap: () {
+              print('Navegar para tela de detalhes');
+              Navigator.of(context).pushNamed(AppRoutes.SCHEDULING_DETAILS,
+                  arguments: scheduling);
+            },
+            child: ListTile(
+              leading: Text(
+                DateFormat('Hm', 'pt_BR').format(scheduling.date),
+                style: const TextStyle(
+                  color: AppColors.contentPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
               ),
-            ),
-            title: Row(
-              children: [
-                Text(
-                  scheduling.petName,
-                  style: const TextStyle(
-                      color: AppColors.contentPrimary,
-                      fontWeight: FontWeight.bold),
-                ),
-                const Text(
-                  ' / ',
-                  style: TextStyle(
-                    color: AppColors.contentSecondary,
+              title: Row(
+                children: [
+                  Text(
+                    scheduling.petName,
+                    style: const TextStyle(
+                        color: AppColors.contentPrimary,
+                        fontWeight: FontWeight.bold),
                   ),
-                ),
-                Text(
-                  scheduling.tutor,
-                  style: const TextStyle(
-                    color: AppColors.contentSecondary,
+                  const Text(
+                    ' / ',
+                    style: TextStyle(
+                      color: AppColors.contentSecondary,
+                    ),
                   ),
+                  Text(
+                    scheduling.tutor,
+                    style: const TextStyle(
+                      color: AppColors.contentSecondary,
+                    ),
+                  ),
+                ],
+              ),
+              subtitle: Text(
+                scheduling.service.name,
+                style: const TextStyle(
+                  color: AppColors.contentSecondary,
                 ),
-              ],
-            ),
-            subtitle: Text(
-              scheduling.service.name,
-              style: const TextStyle(
-                color: AppColors.contentSecondary,
               ),
             ),
           ),

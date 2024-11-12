@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pet_world_mobile/models/scheduling_list.dart';
+import 'package:pet_world_mobile/screens/scheduling_details_screen.dart';
 
 import 'package:pet_world_mobile/utils/app_routes.dart';
 import 'package:pet_world_mobile/theme/colors/app_colors.dart';
-import 'package:pet_world_mobile/screens/schedules-screen.dart';
+import 'package:pet_world_mobile/screens/schedules_screen.dart';
 import 'package:pet_world_mobile/screens/scheduling_form_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -68,6 +69,11 @@ class MyApp extends StatelessWidget {
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
+            titleMedium: GoogleFonts.interTight(
+              color: AppColors.contentPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           dividerTheme: theme.dividerTheme.copyWith(
             color: AppColors.borderDivisor,
@@ -128,6 +134,7 @@ class MyApp extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.bold),
               foregroundColor: Colors.white,
+              iconColor: AppColors.contentBrand,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -155,11 +162,35 @@ class MyApp extends StatelessWidget {
             dialTextColor: AppColors.contentPrimary,
             entryModeIconColor: AppColors.contentSecondary,
           ),
+          dialogTheme: theme.dialogTheme.copyWith(
+            backgroundColor: AppColors.backgroundTertiary,
+            surfaceTintColor: AppColors.backgroundBrand,
+            barrierColor: AppColors.backgroundPrimary.withOpacity(0.8),
+            titleTextStyle: GoogleFonts.interTight(
+              color: AppColors.contentPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          popupMenuTheme: theme.popupMenuTheme.copyWith(
+            color: AppColors.backgroundTertiary,
+            surfaceTintColor: AppColors.backgroundBrand,
+            textStyle: GoogleFonts.interTight(
+              color: AppColors.contentPrimary,
+              fontSize: 18,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          listTileTheme: theme.listTileTheme.copyWith(
+            iconColor: AppColors.contentBrand,
+            textColor: Colors.white,
+          ),
           useMaterial3: true,
         ),
         routes: {
           AppRoutes.HOME: (ctx) => const SchedulesScreen(),
           AppRoutes.SCHEDULING_FORM: (ctx) => const SchedulingFormScreen(),
+          AppRoutes.SCHEDULING_DETAILS: (ctx) => const SchedulingDetailsScreen()
         },
       ),
     );

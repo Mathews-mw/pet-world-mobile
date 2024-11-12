@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pet_world_mobile/@types/enums/scheduling_period.dart';
 
 import 'package:pet_world_mobile/data/dummy_data.dart';
-import 'package:pet_world_mobile/models/scheduling.dart';
+import 'package:pet_world_mobile/@types/enums/scheduling_period.dart';
 import 'package:pet_world_mobile/models/value-objects/scheduling_details.dart';
 
 class SchedulingList with ChangeNotifier {
   final List<SchedulingDetails> _items = dummySchedules;
 
   List<SchedulingDetails> get schedules {
-    print('Tamanho da lista de agendamentos: ${_items.length}');
     return [..._items];
   }
 
@@ -46,5 +44,14 @@ class SchedulingList with ChangeNotifier {
     _items.add(scheduling);
 
     notifyListeners();
+  }
+
+  Future<void> removeScheduling(SchedulingDetails scheduling) async {
+    final index = _items.indexWhere((item) => item.id == scheduling.id);
+
+    if (index >= 0) {
+      _items.removeWhere((item) => item.id == scheduling.id);
+      notifyListeners();
+    }
   }
 }

@@ -3,4 +3,5 @@
 class AppRoutes {
   static const HOME = '/';
   static const SCHEDULING_FORM = '/scheduling-form';
+  static const SCHEDULING_DETAILS = '/scheduling-details';
 }

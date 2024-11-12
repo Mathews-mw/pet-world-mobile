@@ -1,17 +1,16 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_world_mobile/models/value-objects/scheduling_details.dart';
 import 'package:provider/provider.dart';
-import 'package:pet_world_mobile/data/dummy_data.dart';
-import 'package:pet_world_mobile/models/scheduling_list.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:pet_world_mobile/models/service.dart';
-import 'package:pet_world_mobile/models/scheduling.dart';
+import 'package:pet_world_mobile/data/dummy_data.dart';
+import 'package:pet_world_mobile/models/scheduling_list.dart';
 import 'package:pet_world_mobile/theme/colors/app_colors.dart';
 import 'package:pet_world_mobile/@types/enums/animal_types.dart';
 import 'package:pet_world_mobile/@mixins/form_validations_mixin.dart';
 import 'package:pet_world_mobile/components/app_drawer/app_drawer.dart';
+import 'package:pet_world_mobile/models/value-objects/scheduling_details.dart';
 
 class SchedulingFormScreen extends StatefulWidget {
   const SchedulingFormScreen({super.key});
@@ -28,8 +27,16 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
   ];
 
   final List<String> _tutorsList = dummyTutorsList;
-
   final List<Service> _servicesList = dummyServicesList;
+
+  final _ownerFocus = FocusNode();
+  final _petFocus = FocusNode();
+  final _animalTypeFocus = FocusNode();
+  final _contactFocus = FocusNode();
+  final _serviceFocus = FocusNode();
+  final _descriptionFocus = FocusNode();
+  final _dateFocus = FocusNode();
+  final _timeFocus = FocusNode();
 
   final TextEditingController _tutorController = TextEditingController();
   final TextEditingController _animalTypeController = TextEditingController();
@@ -45,6 +52,22 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Map<String, Object> formData = <String, Object>{};
 
+  @override
+  void dispose() {
+    super.dispose();
+    _ownerFocus.dispose();
+    _petFocus.dispose();
+    _animalTypeFocus.dispose();
+    _contactFocus.dispose();
+    _serviceFocus.dispose();
+    _descriptionFocus.dispose();
+    _dateFocus.dispose();
+    _timeFocus.dispose();
+    _tutorController.dispose();
+    _animalTypeController.dispose();
+    _serviceController.dispose();
+  }
+
   _showDatePicker(BuildContext context) {
     showDatePicker(
       context: context,
@@ -59,6 +82,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
       setState(() {
         _selectedDate = date;
         formData['date'] = date;
+        FocusScope.of(context).requestFocus(_timeFocus);
       });
     });
   }
@@ -215,6 +239,9 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                           labelText: 'Nome do responsável',
                           prefixIcon: Icon(MdiIcons.account),
                         ),
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_petFocus);
+                        },
                         onSaved: (String? value) =>
                             formData['petOwner'] = value ?? '',
                         validator: isNotEmpty,
@@ -228,6 +255,10 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                           labelText: 'Nome do pet',
                           prefixIcon: Icon(Icons.pets),
                         ),
+                        focusNode: _petFocus,
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_animalTypeFocus);
+                        },
                         onSaved: (String? value) =>
                             formData['petName'] = value ?? '',
                       ),
@@ -254,6 +285,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                             ? 'Por favor, selecione um tipo de animal'
                             : null,
                         controller: _animalTypeController,
+                        focusNode: _animalTypeFocus,
                         onSelected: (value) {
                           if (value!.isNotEmpty) {
                             formData['animalType'] = value;
@@ -280,6 +312,11 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                           labelText: 'Contato',
                           prefixIcon: Icon(MdiIcons.phone),
                         ),
+                        keyboardType: TextInputType.phone,
+                        focusNode: _contactFocus,
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_serviceFocus);
+                        },
                         onSaved: (String? value) =>
                             formData['ownerContact'] = value ?? '',
                       ),
@@ -306,6 +343,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                             ? 'Por favor, selecione um tipo de serviço'
                             : null,
                         controller: _serviceController,
+                        focusNode: _serviceFocus,
                         onSelected: (value) {
                           if (value!.isNotEmpty) {
                             formData['serviceCod'] = value;
@@ -333,6 +371,10 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                         decoration: const InputDecoration(
                           hintText: 'Insira alguma observação...',
                         ),
+                        focusNode: _descriptionFocus,
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_dateFocus);
+                        },
                         onSaved: (String? value) =>
                             formData['description'] = value ?? '',
                       ),
@@ -363,6 +405,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                               SizedBox(
                                 width: double.infinity,
                                 child: OutlinedButton(
+                                    focusNode: _dateFocus,
                                     onPressed: () => _showDatePicker(context),
                                     child: Text(DateFormat('dd/MM/y')
                                         .format(_selectedDate))),
@@ -393,6 +436,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                               SizedBox(
                                 width: double.infinity,
                                 child: OutlinedButton(
+                                  focusNode: _timeFocus,
                                   onPressed: () => _showTimePicker(context),
                                   child: Text(
                                     '${_selectedTime.hour.toString()}: ${_selectedTime.minute.toString()}',
