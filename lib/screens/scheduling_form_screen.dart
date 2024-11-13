@@ -53,6 +53,40 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
   final Map<String, Object> formData = <String, Object>{};
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (formData.isEmpty) {
+      final arg = ModalRoute.of(context)?.settings.arguments;
+
+      if (arg != null) {
+        final scheduling = arg as SchedulingDetails;
+
+        formData['id'] = scheduling.id;
+        formData['tutor'] = scheduling.tutor;
+        formData['petName'] = scheduling.petName;
+        formData['animalType'] = scheduling.animalType;
+        formData['petOwner'] = scheduling.petOwner;
+        formData['ownerContact'] = scheduling.ownerContact;
+        formData['serviceCod'] = scheduling.serviceCod;
+        formData['description'] = scheduling.description ?? '';
+
+        _selectedDate = DateTime(
+          scheduling.date.year,
+          scheduling.date.month,
+          scheduling.date.day,
+        );
+        _selectedTime = TimeOfDay(
+          hour: scheduling.date.hour,
+          minute: scheduling.date.minute,
+        );
+        formData['date'] = _selectedDate;
+        formData['hour'] = _selectedTime;
+      }
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _ownerFocus.dispose();
@@ -143,29 +177,9 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
       return;
     }
 
-    final selectedDate = formData['date'] as DateTime;
-    final selectedTime = formData['hour'] as TimeOfDay;
-
-    final scheduling = SchedulingDetails(
-      tutor: formData['tutor'] as String,
-      petName: formData['petName'] as String,
-      animalType: formData['animalType'] as String,
-      petOwner: formData['petOwner'] as String,
-      ownerContact: formData['ownerContact'] as String,
-      serviceCod: formData['serviceCod'] as String,
-      description: formData['description'] as String,
-      date: DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
-        selectedTime.hour,
-        selectedTime.minute,
-      ),
-    );
-
     try {
       await Provider.of<SchedulingList>(context, listen: false)
-          .saveScheduling(scheduling);
+          .saveScheduling(formData);
 
       // Verifique se o widget ainda está montado antes de chamar Navigator.of(context)
       if (mounted) {
@@ -210,6 +224,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                           color: AppColors.contentPrimary,
                         ),
                         controller: _tutorController,
+                        initialSelection: formData['tutor']?.toString(),
                         errorText: _isTutorFieldEmpty
                             ? 'Por favor, selecione um tutor'
                             : null,
@@ -239,6 +254,8 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                           labelText: 'Nome do responsável',
                           prefixIcon: Icon(MdiIcons.account),
                         ),
+                        textInputAction: TextInputAction.next,
+                        initialValue: formData['petOwner']?.toString(),
                         onFieldSubmitted: (_) {
                           FocusScope.of(context).requestFocus(_petFocus);
                         },
@@ -256,6 +273,8 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                           prefixIcon: Icon(Icons.pets),
                         ),
                         focusNode: _petFocus,
+                        textInputAction: TextInputAction.next,
+                        initialValue: formData['petName']?.toString(),
                         onFieldSubmitted: (_) {
                           FocusScope.of(context).requestFocus(_animalTypeFocus);
                         },
@@ -286,6 +305,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                             : null,
                         controller: _animalTypeController,
                         focusNode: _animalTypeFocus,
+                        initialSelection: formData['animalType']?.toString(),
                         onSelected: (value) {
                           if (value!.isNotEmpty) {
                             formData['animalType'] = value;
@@ -314,6 +334,8 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                         ),
                         keyboardType: TextInputType.phone,
                         focusNode: _contactFocus,
+                        textInputAction: TextInputAction.next,
+                        initialValue: formData['ownerContact']?.toString(),
                         onFieldSubmitted: (_) {
                           FocusScope.of(context).requestFocus(_serviceFocus);
                         },
@@ -344,6 +366,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                             : null,
                         controller: _serviceController,
                         focusNode: _serviceFocus,
+                        initialSelection: formData['serviceCod']?.toString(),
                         onSelected: (value) {
                           if (value!.isNotEmpty) {
                             formData['serviceCod'] = value;
@@ -372,6 +395,7 @@ class _SchedulingFormScreenState extends State<SchedulingFormScreen>
                           hintText: 'Insira alguma observação...',
                         ),
                         focusNode: _descriptionFocus,
+                        initialValue: formData['description']?.toString(),
                         onFieldSubmitted: (_) {
                           FocusScope.of(context).requestFocus(_dateFocus);
                         },

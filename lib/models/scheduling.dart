@@ -1,5 +1,5 @@
 class Scheduling {
-  String id = DateTime.now().microsecondsSinceEpoch.toString();
+  final String id;
   final String tutor;
   final String petName;
   final String animalType;
@@ -10,6 +10,7 @@ class Scheduling {
   final DateTime date;
 
   Scheduling({
+    required this.id,
     required this.tutor,
     required this.petName,
     required this.animalType,

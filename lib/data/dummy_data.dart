@@ -4,6 +4,7 @@ import 'package:pet_world_mobile/models/value-objects/scheduling_details.dart';
 
 final List<SchedulingDetails> dummySchedules = [
   SchedulingDetails(
+    id: DateTime.now().microsecondsSinceEpoch.toString(),
     tutor: dummyTutorsList[0],
     petName: 'Margaret',
     animalType: AnimalType.DOG.label,
@@ -13,6 +14,7 @@ final List<SchedulingDetails> dummySchedules = [
     date: DateTime(2024, 11, 13, 9, 30),
   ),
   SchedulingDetails(
+    id: DateTime.now().microsecondsSinceEpoch.toString(),
     tutor: dummyTutorsList[1],
     petName: 'Butler',
     animalType: AnimalType.DOG.label,
@@ -22,6 +24,7 @@ final List<SchedulingDetails> dummySchedules = [
     date: DateTime(2024, 11, 13, 9, 45),
   ),
   SchedulingDetails(
+    id: DateTime.now().microsecondsSinceEpoch.toString(),
     tutor: dummyTutorsList[2],
     petName: 'Alta',
     animalType: AnimalType.CAT.label,
@@ -31,6 +34,7 @@ final List<SchedulingDetails> dummySchedules = [
     date: DateTime(2024, 11, 13, 10, 15),
   ),
   SchedulingDetails(
+    id: DateTime.now().microsecondsSinceEpoch.toString(),
     tutor: dummyTutorsList[3],
     petName: 'Miguel',
     animalType: AnimalType.DOG.label,
@@ -40,6 +44,7 @@ final List<SchedulingDetails> dummySchedules = [
     date: DateTime(2024, 11, 13, 14),
   ),
   SchedulingDetails(
+    id: DateTime.now().microsecondsSinceEpoch.toString(),
     tutor: dummyTutorsList[4],
     petName: 'Evelyn',
     animalType: AnimalType.CAT.label,
@@ -49,6 +54,7 @@ final List<SchedulingDetails> dummySchedules = [
     date: DateTime(2024, 11, 13, 14, 30),
   ),
   SchedulingDetails(
+    id: DateTime.now().microsecondsSinceEpoch.toString(),
     tutor: dummyTutorsList[5],
     petName: 'Darrell',
     animalType: AnimalType.CAT.label,
@@ -58,6 +64,7 @@ final List<SchedulingDetails> dummySchedules = [
     date: DateTime(2024, 11, 13, 15, 15),
   ),
   SchedulingDetails(
+    id: DateTime.now().microsecondsSinceEpoch.toString(),
     tutor: dummyTutorsList[6],
     petName: 'Andrew',
     animalType: AnimalType.DOG.label,
@@ -67,6 +74,7 @@ final List<SchedulingDetails> dummySchedules = [
     date: DateTime(2024, 11, 13, 19, 30),
   ),
   SchedulingDetails(
+    id: DateTime.now().microsecondsSinceEpoch.toString(),
     tutor: dummyTutorsList[7],
     petName: 'Lucile',
     animalType: AnimalType.CAT.label,

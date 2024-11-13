@@ -181,6 +181,23 @@ class _SchedulingDetailsScreenState extends State<SchedulingDetailsScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 5),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      scheduling.description != null ? 'Observação:' : '',
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      textAlign: TextAlign.justify,
+                      scheduling.description ?? '',
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

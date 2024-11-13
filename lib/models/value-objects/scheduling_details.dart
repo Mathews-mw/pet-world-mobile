@@ -6,6 +6,7 @@ abstract class SchedulingDetailsProps extends Scheduling {
   abstract final Service service;
 
   SchedulingDetailsProps({
+    required super.id,
     required super.tutor,
     required super.petName,
     required super.animalType,
@@ -18,15 +19,17 @@ abstract class SchedulingDetailsProps extends Scheduling {
 }
 
 class SchedulingDetails extends Scheduling {
-  SchedulingDetails(
-      {required super.tutor,
-      required super.petName,
-      required super.animalType,
-      required super.petOwner,
-      required super.ownerContact,
-      required super.serviceCod,
-      super.description,
-      required super.date});
+  SchedulingDetails({
+    required super.id,
+    required super.tutor,
+    required super.petName,
+    required super.animalType,
+    required super.petOwner,
+    required super.ownerContact,
+    required super.serviceCod,
+    super.description,
+    required super.date,
+  });
 
   Service get service {
     final service =
